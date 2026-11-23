@@ -8,26 +8,34 @@ const today = () => new Date().toLocaleDateString('sv'); // local YYYY-MM-DD
 const thaiDate = (d) =>
   new Date(d + 'T00:00:00').toLocaleDateString('th-TH', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
 
-// Soft pastel tone to sit with the Light & Shadow palette; dark text stays readable on it.
-// Changing TONE re-rolls every member's colour once.
-const TONE = ' 42% 70%)';
-const EVENT_TEXT = '#2f3a45';
+// Member colours come from the Pantone "Atmospheric" swatches (Cloud Dancer left out: it is the page white).
+// Value = text colour that stays readable on that swatch.
+const PALETTE = {
+  '#b7d1ea': '#24364a', // Nantucket Breeze
+  '#6ea9d3': '#14283b', // Alaskan Blue
+  '#a9a9c6': '#262638', // Cosmic Sky
+  '#a5b2aa': '#232e28', // Aqua Gray
+  '#487ab7': '#ffffff', // Regatta
+  '#5fc6c1': '#123634', // Rinsing Rivulet
+  '#e3cc81': '#3d3415', // Dusky Citron
+};
+const EVENT_TEXT = '#3f3a46';
 
 let s = load();
 colorMembers();
 save();
 
-// Random hue, but the farthest of 12 random tries from hues already taken, so members stay easy to tell apart.
+// A random swatch nobody uses yet; once all 7 are taken, colours repeat.
 function randomColor() {
-  const used = s.members.filter((m) => m.color?.endsWith(TONE)).map((m) => parseInt(m.color.slice(4)));
-  const gap = (h) => Math.min(360, ...used.map((u) => Math.min(Math.abs(h - u), 360 - Math.abs(h - u))));
-  const tries = Array.from({ length: 12 }, () => Math.floor(Math.random() * 360));
-  return `hsl(${tries.reduce((a, b) => (gap(b) > gap(a) ? b : a))}${TONE}`;
+  const all = Object.keys(PALETTE);
+  const free = all.filter((c) => !s.members.some((m) => m.color === c));
+  const pool = free.length ? free : all;
+  return pool[Math.floor(Math.random() * pool.length)];
 }
-// Members with no colour, or one from before the palette change, get a new one; it is then stored.
+// Members with no colour, or one from an earlier palette, get a new one; it is then stored.
 function colorMembers() {
   s.members.forEach((m) => {
-    if (!m.color?.endsWith(TONE)) m.color = randomColor();
+    if (!(m.color in PALETTE)) m.color = randomColor();
   });
 }
 function load() {
@@ -266,9 +274,10 @@ $('#input-import').addEventListener('change', async (e) => {
 });
 
 // ---------- roster calendar ----------
-const OFF = '#9b918f'; // Cloud Cover, for closed days
-const DAY_OFF = '#e6e2dc'; // a step darker than Cloud Dancer
+const OFF = '#a5b2aa'; // Aqua Gray, for closed days
+const DAY_OFF = '#f0eee9'; // Cloud Dancer
 const colorOf = (id) => s.members.find((m) => m.id === id)?.color ?? OFF;
+const textOn = (id) => PALETTE[colorOf(id)] ?? EVENT_TEXT;
 let viewMonth = today().slice(0, 7) + '-01';
 // Defined before the calendar: FullCalendar 7 fetches events while it is being constructed.
 const mark = (d, slot) => (s.overrides[`${d}|${slot}`] ? '✎ ' : '');
@@ -293,11 +302,11 @@ const calendar = new FullCalendar.Calendar($('#calendar'), {
       }
       const day = dayView(s, d);
       if (day?.bathroom)
-        events.push({ start: d, order: 0, color: colorOf(day.bathroom), contrastColor: EVENT_TEXT, className: 'ev-bathroom', title: `ล้างห้องน้ำ: ${mark(d, 'bathroom')}${nameOf('members', day.bathroom)}`, extendedProps: { slot: 'bathroom' } });
+        events.push({ start: d, order: 0, color: colorOf(day.bathroom), contrastColor: textOn(day.bathroom), className: 'ev-bathroom', title: `ล้างห้องน้ำ: ${mark(d, 'bathroom')}${nameOf('members', day.bathroom)}`, extendedProps: { slot: 'bathroom' } });
       for (const a of day?.assignments ?? [])
-        events.push({ start: d, order: 1, color: colorOf(a.memberId), contrastColor: EVENT_TEXT, title: `${nameOf('tasks', a.taskId)}: ${mark(d, a.taskId)}${nameOf('members', a.memberId)}`, extendedProps: { slot: a.taskId } });
+        events.push({ start: d, order: 1, color: colorOf(a.memberId), contrastColor: textOn(a.memberId), title: `${nameOf('tasks', a.taskId)}: ${mark(d, a.taskId)}${nameOf('members', a.memberId)}`, extendedProps: { slot: a.taskId } });
       for (const o of s.memberDaysOff.filter((o) => o.date === d))
-        events.push({ start: d, order: 2, color: DAY_OFF, contrastColor: '#756f69', title: `หยุด: ${nameOf('members', o.memberId)}` });
+        events.push({ start: d, order: 2, color: DAY_OFF, contrastColor: '#8a8492', title: `หยุด: ${nameOf('members', o.memberId)}` });
     }
     success(events);
   },

@@ -24,79 +24,82 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@7.1.5/skeleton.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fullcalendar/bootstrap5@7.1.5/theme.css" />
     <style>
-      /* Pantone "Light & Shadow" palette; hex values approximate the TCX swatches.
-         Light main area (Cloud Dancer) against a shadowed sidebar (Blue Fusion). */
+      /* "Solar Violet": off-white #f7f1e3 with a tech-violet #706fd3 accent, kept minimal.
+         Buttons use the violet one step deeper (#6362c9) so white labels pass WCAG AA contrast. */
       :root {
-        --cp-cloud: #f0eee9; --cp-vista: #c8e3cb; --cp-baltic: #79b5d8; --cp-mist: #d5cd94;
-        --cp-violet: #a992a9; --cp-cover: #9b918f; --cp-hematite: #756f69; --cp-fusion: #4b6177;
-        --cp-shadow: 0 1px 2px rgba(75, 97, 119, 0.06), 0 8px 24px rgba(75, 97, 119, 0.08);
+        --cp-violet: #706fd3; --cp-violet-deep: #6362c9; --cp-violet-dark: #504fb0;
+        --cp-paper: #f7f1e3; --cp-paper-deep: #ece4d1; --cp-card: #fffdf8; --cp-text: #3b3742;
+        --cp-line: rgba(59, 55, 66, 0.08);
+        --cp-shadow: 0 1px 2px rgba(59, 55, 66, 0.04), 0 10px 30px rgba(112, 111, 211, 0.07);
         --bs-body-font-family: 'IBM Plex Sans Thai', system-ui, sans-serif;
-        --bs-primary: var(--cp-fusion); --bs-primary-rgb: 75, 97, 119;
-        --bs-info: var(--cp-baltic); --bs-info-rgb: 121, 181, 216;
-        --bs-success: #5f9a6c; --bs-success-rgb: 95, 154, 108;
-        --bs-link-color: var(--cp-fusion); --bs-link-color-rgb: 75, 97, 119;
-        --bs-link-hover-color: #3a4c5e; --bs-link-hover-color-rgb: 58, 76, 94;
+        --bs-primary: var(--cp-violet-deep); --bs-primary-rgb: 99, 98, 201;
+        --bs-link-color: var(--cp-violet-deep); --bs-link-color-rgb: 99, 98, 201;
+        --bs-link-hover-color: var(--cp-violet-dark); --bs-link-hover-color-rgb: 80, 79, 176;
         --bs-border-radius: 0.6rem;
       }
       [data-bs-theme='light'] {
-        --bs-tertiary-bg: var(--cp-cloud); --bs-tertiary-bg-rgb: 240, 238, 233;
-        --bs-body-color: #3d3a36; --bs-heading-color: var(--cp-hematite);
+        --bs-tertiary-bg: var(--cp-paper); --bs-tertiary-bg-rgb: 247, 241, 227;
+        --bs-body-color: var(--cp-text); --bs-heading-color: var(--cp-text);
       }
 
-      /* Sidebar: the shadow side */
+      /* Sidebar: quiet paper with violet only on the active item */
+      [data-bs-theme='light'] .app-sidebar {
+        background: var(--cp-card) !important; border-right: 1px solid var(--cp-line);
+      }
       .app-sidebar {
-        background: linear-gradient(180deg, var(--cp-fusion) 0%, #3c4f61 100%) !important;
-        --lte-sidebar-color: rgba(240, 238, 233, 0.8);
-        --lte-sidebar-hover-color: #fff;
-        --lte-sidebar-hover-bg: rgba(240, 238, 233, 0.08);
-        --lte-sidebar-active-color: #fff;
-        --lte-sidebar-menu-active-bg: rgba(121, 181, 216, 0.22);
-        --lte-sidebar-menu-active-color: #fff;
+        --lte-sidebar-color: #6b6673;
+        --lte-sidebar-hover-color: var(--cp-text);
+        --lte-sidebar-hover-bg: rgba(112, 111, 211, 0.06);
+        --lte-sidebar-active-color: var(--cp-violet-dark);
+        --lte-sidebar-menu-active-bg: rgba(112, 111, 211, 0.12);
+        --lte-sidebar-menu-active-color: var(--cp-violet-dark);
       }
-      .app-sidebar .sidebar-brand { border-bottom: 1px solid rgba(240, 238, 233, 0.12); }
-      .app-sidebar .brand-text { color: var(--cp-cloud); letter-spacing: 0.02em; }
-      .app-sidebar .brand-icon { color: var(--cp-mist); }
+      .app-sidebar .sidebar-brand { border-bottom: 1px solid var(--cp-line); }
+      .app-sidebar .brand-text { color: var(--cp-text); letter-spacing: 0.04em; }
+      .app-sidebar .brand-icon { color: var(--cp-violet); }
       .sidebar-menu .nav-link { border-radius: 0.6rem; margin: 0.15rem 0.5rem; }
-      .sidebar-menu .nav-link.active { box-shadow: inset 3px 0 0 var(--cp-mist); }
+      .sidebar-menu .nav-link.active { box-shadow: inset 3px 0 0 var(--cp-violet); font-weight: 600; }
 
-      /* Main: the light side */
+      /* Main */
       [data-bs-theme='light'] .app-header {
-        background: rgba(240, 238, 233, 0.85) !important; backdrop-filter: blur(8px);
-        border-bottom: 1px solid rgba(117, 111, 105, 0.12);
+        background: rgba(247, 241, 227, 0.85) !important; backdrop-filter: blur(8px);
+        border-bottom: 1px solid var(--cp-line);
       }
       #page-title { font-weight: 600; letter-spacing: 0.01em; }
+      [data-bs-theme='light'] .card { background: var(--cp-card); }
       .card { border: 0; border-radius: 1rem; box-shadow: var(--cp-shadow); }
-      .card-header { background: transparent; border-bottom-color: rgba(117, 111, 105, 0.12); }
+      .card-header { background: transparent; border-bottom-color: var(--cp-line); }
       .card-title { font-weight: 600; color: var(--bs-heading-color); }
-      .list-group-item { border-color: rgba(117, 111, 105, 0.12); }
-      .list-group-item:hover { background: rgba(200, 227, 203, 0.18); }
-      .app-footer { background: transparent; border-top: 0; color: var(--cp-cover); }
+      [data-bs-theme='light'] .list-group-item { background: transparent; }
+      .list-group-item { border-color: var(--cp-line); }
+      .list-group-item:hover { background: rgba(112, 111, 211, 0.04); }
+      .app-footer { background: transparent; border-top: 0; color: #a39e94; }
 
       .btn { border-radius: 0.6rem; }
       .btn-primary {
-        --bs-btn-bg: var(--cp-fusion); --bs-btn-border-color: var(--cp-fusion);
-        --bs-btn-hover-bg: #3e5265; --bs-btn-hover-border-color: #3e5265;
-        --bs-btn-active-bg: #334455; --bs-btn-active-border-color: #334455;
-        --bs-btn-disabled-bg: var(--cp-fusion); --bs-btn-disabled-border-color: var(--cp-fusion);
+        --bs-btn-bg: var(--cp-violet-deep); --bs-btn-border-color: var(--cp-violet-deep);
+        --bs-btn-hover-bg: var(--cp-violet-dark); --bs-btn-hover-border-color: var(--cp-violet-dark);
+        --bs-btn-active-bg: #44439a; --bs-btn-active-border-color: #44439a;
+        --bs-btn-disabled-bg: var(--cp-violet-deep); --bs-btn-disabled-border-color: var(--cp-violet-deep);
       }
       .btn-outline-primary {
-        --bs-btn-color: var(--cp-fusion); --bs-btn-border-color: rgba(75, 97, 119, 0.4);
-        --bs-btn-hover-bg: var(--cp-fusion); --bs-btn-hover-border-color: var(--cp-fusion);
-        --bs-btn-active-bg: #3e5265; --bs-btn-active-border-color: #3e5265;
+        --bs-btn-color: var(--cp-violet-deep); --bs-btn-border-color: rgba(112, 111, 211, 0.45);
+        --bs-btn-hover-bg: var(--cp-violet-deep); --bs-btn-hover-border-color: var(--cp-violet-deep);
+        --bs-btn-active-bg: var(--cp-violet-dark); --bs-btn-active-border-color: var(--cp-violet-dark);
       }
       .btn-outline-secondary {
-        --bs-btn-color: var(--cp-hematite); --bs-btn-border-color: rgba(117, 111, 105, 0.35);
-        --bs-btn-hover-bg: var(--cp-hematite); --bs-btn-hover-border-color: var(--cp-hematite);
+        --bs-btn-color: #6b6673; --bs-btn-border-color: rgba(107, 102, 115, 0.3);
+        --bs-btn-hover-bg: #6b6673; --bs-btn-hover-border-color: #6b6673;
       }
       .form-control:focus, .form-select:focus, .form-check-input:focus {
-        border-color: var(--cp-baltic); box-shadow: 0 0 0 0.25rem rgba(121, 181, 216, 0.3);
+        border-color: var(--cp-violet); box-shadow: 0 0 0 0.25rem rgba(112, 111, 211, 0.2);
       }
-      .form-check-input:checked { background-color: var(--cp-fusion); border-color: var(--cp-fusion); }
+      .form-check-input:checked { background-color: var(--cp-violet-deep); border-color: var(--cp-violet-deep); }
 
-      /* Calendar */
-      #calendar .fc-toolbar-title { font-weight: 600; color: var(--bs-heading-color); }
-      #calendar .fc-col-header-cell { background: rgba(121, 181, 216, 0.12); font-weight: 600; }
-      #calendar .fc-day-today { background: rgba(213, 205, 148, 0.25) !important; }
+      /* Calendar: Pantone "Atmospheric" tones (the rest of the page stays Solar Violet) */
+      #calendar .fc-toolbar-title { font-weight: 600; color: #487ab7; }
+      #calendar .fc-col-header-cell { background: #b7d1ea; color: #24364a; font-weight: 600; }
+      #calendar .fc-day-today { background: rgba(227, 204, 129, 0.25) !important; }
       #calendar .fc-event { border: 0; border-radius: 0.4rem; padding: 1px 4px; margin-bottom: 2px; }
       #calendar .text-body-tertiary { color: var(--bs-secondary-color) !important; }
       #calendar .fc-event { cursor: pointer; white-space: normal; }
