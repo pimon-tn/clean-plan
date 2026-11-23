@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <title>ตารางเวรทำความสะอาด</title>
+    <link rel="icon" href="data:," />
+    <!-- AdminLTE's no-flash colour mode init: stored choice, then OS preference. -->
+    <script>
+      (() => {
+        let stored = null;
+        try { stored = localStorage.getItem('lte-theme'); } catch {}
+        const dark = stored ? stored === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+        document.documentElement.setAttribute('data-bs-theme', dark ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-lte-theme-resolved', '');
+      })();
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&display=swap" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.2/font/bootstrap-icons.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@4.10.2/dist/css/adminlte.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@7.1.5/skeleton.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fullcalendar/bootstrap5@7.1.5/theme.css" />
+    <style>
+      /* Pantone "Light & Shadow" palette; hex values approximate the TCX swatches.
+         Light main area (Cloud Dancer) against a shadowed sidebar (Blue Fusion). */
+      :root {
+        --cp-cloud: #f0eee9; --cp-vista: #c8e3cb; --cp-baltic: #79b5d8; --cp-mist: #d5cd94;
+        --cp-violet: #a992a9; --cp-cover: #9b918f; --cp-hematite: #756f69; --cp-fusion: #4b6177;
+        --cp-shadow: 0 1px 2px rgba(75, 97, 119, 0.06), 0 8px 24px rgba(75, 97, 119, 0.08);
+        --bs-body-font-family: 'IBM Plex Sans Thai', system-ui, sans-serif;
+        --bs-primary: var(--cp-fusion); --bs-primary-rgb: 75, 97, 119;
+        --bs-info: var(--cp-baltic); --bs-info-rgb: 121, 181, 216;
+        --bs-success: #5f9a6c; --bs-success-rgb: 95, 154, 108;
+        --bs-link-color: var(--cp-fusion); --bs-link-color-rgb: 75, 97, 119;
+        --bs-link-hover-color: #3a4c5e; --bs-link-hover-color-rgb: 58, 76, 94;
+        --bs-border-radius: 0.6rem;
+      }
+      [data-bs-theme='light'] {
+        --bs-tertiary-bg: var(--cp-cloud); --bs-tertiary-bg-rgb: 240, 238, 233;
+        --bs-body-color: #3d3a36; --bs-heading-color: var(--cp-hematite);
+      }
+
+      /* Sidebar: the shadow side */
+      .app-sidebar {
+        background: linear-gradient(180deg, var(--cp-fusion) 0%, #3c4f61 100%) !important;
+        --lte-sidebar-color: rgba(240, 238, 233, 0.8);
+        --lte-sidebar-hover-color: #fff;
+        --lte-sidebar-hover-bg: rgba(240, 238, 233, 0.08);
+        --lte-sidebar-active-color: #fff;
+        --lte-sidebar-menu-active-bg: rgba(121, 181, 216, 0.22);
+        --lte-sidebar-menu-active-color: #fff;
+      }
+      .app-sidebar .sidebar-brand { border-bottom: 1px solid rgba(240, 238, 233, 0.12); }
+      .app-sidebar .brand-text { color: var(--cp-cloud); letter-spacing: 0.02em; }
+      .app-sidebar .brand-icon { color: var(--cp-mist); }
+      .sidebar-menu .nav-link { border-radius: 0.6rem; margin: 0.15rem 0.5rem; }
+      .sidebar-menu .nav-link.active { box-shadow: inset 3px 0 0 var(--cp-mist); }
+
+      /* Main: the light side */
+      [data-bs-theme='light'] .app-header {
+        background: rgba(240, 238, 233, 0.85) !important; backdrop-filter: blur(8px);
+        border-bottom: 1px solid rgba(117, 111, 105, 0.12);
+      }
+      #page-title { font-weight: 600; letter-spacing: 0.01em; }
+      .card { border: 0; border-radius: 1rem; box-shadow: var(--cp-shadow); }
+      .card-header { background: transparent; border-bottom-color: rgba(117, 111, 105, 0.12); }
+      .card-title { font-weight: 600; color: var(--bs-heading-color); }
+      .list-group-item { border-color: rgba(117, 111, 105, 0.12); }
+      .list-group-item:hover { background: rgba(200, 227, 203, 0.18); }
+      .app-footer { background: transparent; border-top: 0; color: var(--cp-cover); }
+
+      .btn { border-radius: 0.6rem; }
+      .btn-primary {
+        --bs-btn-bg: var(--cp-fusion); --bs-btn-border-color: var(--cp-fusion);
+        --bs-btn-hover-bg: #3e5265; --bs-btn-hover-border-color: #3e5265;
+        --bs-btn-active-bg: #334455; --bs-btn-active-border-color: #334455;
+        --bs-btn-disabled-bg: var(--cp-fusion); --bs-btn-disabled-border-color: var(--cp-fusion);
+      }
+      .btn-outline-primary {
+        --bs-btn-color: var(--cp-fusion); --bs-btn-border-color: rgba(75, 97, 119, 0.4);
+        --bs-btn-hover-bg: var(--cp-fusion); --bs-btn-hover-border-color: var(--cp-fusion);
+        --bs-btn-active-bg: #3e5265; --bs-btn-active-border-color: #3e5265;
+      }
+      .btn-outline-secondary {
+        --bs-btn-color: var(--cp-hematite); --bs-btn-border-color: rgba(117, 111, 105, 0.35);
+        --bs-btn-hover-bg: var(--cp-hematite); --bs-btn-hover-border-color: var(--cp-hematite);
+      }
+      .form-control:focus, .form-select:focus, .form-check-input:focus {
+        border-color: var(--cp-baltic); box-shadow: 0 0 0 0.25rem rgba(121, 181, 216, 0.3);
+      }
+      .form-check-input:checked { background-color: var(--cp-fusion); border-color: var(--cp-fusion); }
+
+      /* Calendar */
+      #calendar .fc-toolbar-title { font-weight: 600; color: var(--bs-heading-color); }
+      #calendar .fc-col-header-cell { background: rgba(121, 181, 216, 0.12); font-weight: 600; }
+      #calendar .fc-day-today { background: rgba(213, 205, 148, 0.25) !important; }
+      #calendar .fc-event { border: 0; border-radius: 0.4rem; padding: 1px 4px; margin-bottom: 2px; }
+      #calendar .text-body-tertiary { color: var(--bs-secondary-color) !important; }
+      #calendar .fc-event { cursor: pointer; white-space: normal; }
+      /* Colour is per member, so Bathroom Duty is told apart by weight and a thick outline. */
+      #calendar .ev-bathroom { font-weight: 700; outline: 2px solid var(--bs-body-color); outline-offset: -2px; }
+      @page { size: A4 landscape; margin: 8mm; }
+      @media print {
+        .app-sidebar, .app-header, .app-footer, .no-print, .fc-header-toolbar .fc-button,
+        .fc-header-toolbar button { display: none !important; }
+        .app-wrapper { display: block !important; }
+        .app-main { margin: 0 !important; }
+        .card { border: 0 !important; box-shadow: none !important; }
+        #calendar .fc-event { font-size: 10px; }
+      }
+    </style>
+  </head>
+  <body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
+    <div class="app-wrapper">
+      <nav class="app-header navbar navbar-expand bg-body">
+        <div class="container-fluid">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" data-lte-toggle="sidebar" href="#" role="button" aria-label="เปิด/ปิดเมนู">
+                <i class="bi bi-list"></i>
+              </a>
+            </li>
+          </ul>
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item dropdown">
+              <a class="nav-link" href="#" id="bd-theme" aria-label="โหมดสี" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="bi bi-sun-fill" data-lte-theme-icon="light"></i>
+                <i class="bi bi-moon-fill d-none" data-lte-theme-icon="dark"></i>
+                <i class="bi bi-circle-half d-none" data-lte-theme-icon="auto"></i>
+              </a>
+              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="bd-theme" style="--bs-dropdown-min-width: 8rem">
+                <li><button type="button" class="dropdown-item" data-bs-theme-value="light" aria-pressed="false"><i class="bi bi-sun-fill me-2"></i>สว่าง</button></li>
+                <li><button type="button" class="dropdown-item" data-bs-theme-value="dark" aria-pressed="false"><i class="bi bi-moon-fill me-2"></i>มืด</button></li>
+                <li><button type="button" class="dropdown-item active" data-bs-theme-value="auto" aria-pressed="true"><i class="bi bi-circle-half me-2"></i>ตามระบบ</button></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </nav>
+
+      <aside class="app-sidebar shadow">
+        <div class="sidebar-brand">
+          <a href="#roster" class="brand-link">
+            <i class="bi bi-stars fs-4 brand-icon me-2"></i>
+            <span class="brand-text fw-semibold">Clean Plan</span>
+          </a>
+        </div>
+        <div class="sidebar-wrapper">
+          <nav class="mt-2" aria-label="เมนูหลัก">
+            <ul class="nav sidebar-menu flex-column" id="navigation">
+              <li class="nav-item"><a href="#roster" class="nav-link"><i class="nav-icon bi bi-calendar3"></i><p>ตารางเวร</p></a></li>
+              <li class="nav-item"><a href="#members" class="nav-link"><i class="nav-icon bi bi-people"></i><p>สมาชิก</p></a></li>
+              <li class="nav-item"><a href="#tasks" class="nav-link"><i class="nav-icon bi bi-bucket"></i><p>งาน</p></a></li>
+              <li class="nav-item"><a href="#daysoff" class="nav-link"><i class="nav-icon bi bi-calendar-x"></i><p>วันหยุด</p></a></li>
+              <li class="nav-item"><a href="#settings" class="nav-link"><i class="nav-icon bi bi-gear"></i><p>ตั้งค่า</p></a></li>
+            </ul>
+          </nav>
+        </div>
+      </aside>
+
+      <main class="app-main">
+        <div class="app-content-header">
+          <div class="container-fluid"><h3 class="mb-0" id="page-title"></h3></div>
+        </div>
+        <div class="app-content">
+          <div class="container-fluid">
+            <section data-page="roster" data-title="ตารางเวร">
+              <div class="card">
+                <div class="card-header d-flex flex-wrap gap-2 align-items-center no-print">
+                  <span class="text-body-secondary small me-auto">คลิกที่เวรเพื่อเปลี่ยนคนทำ</span>
+                  <button class="btn btn-primary btn-sm" id="btn-plan"><i class="bi bi-magic me-1"></i>จัดเวร</button>
+                  <button class="btn btn-outline-secondary btn-sm" onclick="print()"><i class="bi bi-printer me-1"></i>พิมพ์</button>
+                </div>
+                <div class="card-body"><div id="calendar"></div></div>
+              </div>
+            </section>
+
+            <section data-page="members" data-title="สมาชิก" hidden>
+              <div class="card" style="max-width: 40rem">
+                <div class="card-body">
+                  <form class="input-group mb-3" data-add="members">
+                    <input class="form-control" name="label" placeholder="ชื่อสมาชิก" aria-label="ชื่อสมาชิก" required />
+                    <button class="btn btn-primary">เพิ่ม</button>
+                  </form>
+                  <ul class="list-group" data-list="members"></ul>
+                  <p class="small text-body-secondary mt-3 mb-0">ลำดับในรายการคือลำดับการวนเวร การเปลี่ยนแปลงจะมีผลเมื่อกด "จัดเวร"</p>
+                </div>
+              </div>
+            </section>
+
+            <section data-page="tasks" data-title="งาน" hidden>
+              <div class="card" style="max-width: 40rem">
+                <div class="card-body">
+                  <form class="input-group mb-3" data-add="tasks">
+                    <input class="form-control" name="label" placeholder="เช่น ถูพื้น" aria-label="ชื่องาน" required />
+                    <button class="btn btn-primary">เพิ่ม</button>
+                  </form>
+                  <ul class="list-group" data-list="tasks"></ul>
+                  <p class="small text-body-secondary mt-3 mb-0">ล้างห้องน้ำจัดแยกสัปดาห์ละครั้ง ไม่ต้องเพิ่มเป็นงาน การเปลี่ยนแปลงจะมีผลเมื่อกด "จัดเวร"</p>
+                </div>
+              </div>
+            </section>
+
+            <section data-page="daysoff" data-title="วันหยุด" hidden>
+              <div class="row g-3">
+                <div class="col-lg-6">
+                  <div class="card">
+                    <div class="card-header"><h3 class="card-title">วันหยุดสมาชิก</h3></div>
+                    <div class="card-body">
+                      <form class="input-group mb-3" id="form-dayoff">
+                        <select class="form-select" name="memberId" aria-label="สมาชิก" required></select>
+                        <input class="form-control" type="date" name="date" aria-label="วันที่" required />
+                        <button class="btn btn-primary">เพิ่ม</button>
+                      </form>
+                      <ul class="list-group" id="list-dayoff"></ul>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-6">
+                  <div class="card">
+                    <div class="card-header"><h3 class="card-title">วันหยุดคลินิก</h3></div>
+                    <div class="card-body">
+                      <form class="input-group mb-3" id="form-holiday">
+                        <input class="form-control" type="date" name="date" aria-label="วันที่" required />
+                        <button class="btn btn-primary">เพิ่ม</button>
+                      </form>
+                      <ul class="list-group" id="list-holiday"></ul>
+                      <p class="small text-body-secondary mt-3 mb-0">วันปิดประจำสัปดาห์ตั้งได้ที่หน้า "ตั้งค่า"</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <p class="small text-body-secondary mt-3">การเปลี่ยนแปลงจะมีผลเมื่อกด "จัดเวร"</p>
+            </section>
+
+            <section data-page="settings" data-title="ตั้งค่า" hidden>
+              <div class="card" style="max-width: 40rem">
+                <div class="card-body">
+                  <label class="form-label" for="bathroom-weekday">วันล้างห้องน้ำ</label>
+                  <select class="form-select mb-3" id="bathroom-weekday"></select>
+                  <div class="form-label">วันปิดประจำสัปดาห์</div>
+                  <div class="mb-3" id="closed-weekdays"></div>
+                  <hr />
+                  <div class="form-label">สำรองข้อมูล</div>
+                  <div class="d-flex flex-wrap gap-2">
+                    <button class="btn btn-outline-primary" id="btn-export"><i class="bi bi-download me-1"></i>Export JSON</button>
+                    <label class="btn btn-outline-secondary mb-0"><i class="bi bi-upload me-1"></i>Import JSON
+                      <input type="file" accept="application/json,.json" id="input-import" hidden />
+                    </label>
+                  </div>
+                  <p class="small text-body-secondary mt-2 mb-0">ข้อมูลเก็บในเบราว์เซอร์เครื่องนี้เท่านั้น ควร export เก็บไว้เป็นระยะ</p>
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+      </main>
+
+      <footer class="app-footer small">Theme: <a href="https://adminlte.io" class="text-decoration-none">AdminLTE</a></footer>
+    </div>
+
+    <div class="modal fade" id="modal-override" tabindex="-1" aria-labelledby="override-title" aria-hidden="true">
+      <div class="modal-dialog modal-sm">
+        <form class="modal-content" id="form-override">
+          <div class="modal-header"><h5 class="modal-title" id="override-title">เปลี่ยนคนทำ</h5></div>
+          <div class="modal-body">
+            <p class="small text-body-secondary" id="override-slot"></p>
+            <select class="form-select" name="memberId" aria-label="สมาชิก"></select>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ยกเลิก</button>
+            <button class="btn btn-primary">บันทึก</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.9/dist/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/admin-lte@4.10.2/dist/js/adminlte.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@7.1.5/all/global.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/bootstrap5@7.1.5/global.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@7.1.5/locales/th/global.js"></script>
+    <script type="module" src="js/app.js"></script>
+  </body>
+</html>
